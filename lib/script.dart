@@ -8,11 +8,9 @@ import 'package:isudgu_app/Providers/dropdownValueListProvider.dart';
 
 class Parser {
 
-  Future<String> getHtml(DropdownValueListProvider dropdownValueListProvider) async {
+  Future<String> getHtml(DropdownValueListProvider dropdownValueListProvider,Map<String, String> currentAccaunt) async {
     String out;
     try {
-
-      AccauntsProvider _accauntsProvider = AccauntsProvider();
       
       Map<String, String> dataSend = {
         "__EVENTTARGET": "EnterBtn",
@@ -21,10 +19,10 @@ class Parser {
             "/wEPDwUKMTQ2MTA3ODA0MWRkyOsDv65TrLlbM6ga+uWJhfOVqmQ/RihVftbFpTmB4LM=",
         "__EVENTVALIDATION":
             "/wEWBgL9ipniDwK4jZRCAqaKlEICypChgggCl/KPlQYCm4zxugS2cJ5mgqC3JnZrasIRZK0eTzcFQlpGIuQakAR5i48crw==",
-        "LNameTxt": _accauntsProvider.currentAccaunt['fName'],
-        "FNameTxt": _accauntsProvider.currentAccaunt['sName'],
-        "PatrTxt" : _accauntsProvider.currentAccaunt['lName'],
-        "NZachKnTxt": _accauntsProvider.currentAccaunt['password']
+        "LNameTxt":   currentAccaunt['fName'],
+        "FNameTxt":   currentAccaunt['sName'],
+        "PatrTxt" :   currentAccaunt['lName'],
+        "NZachKnTxt": currentAccaunt['password']
       };
 
       Map<String, String> headersSend = {
@@ -125,9 +123,9 @@ class Parser {
     return out;
   }
 
-  Future<List<Map<String, String>>> parseHtml(DropdownValueListProvider dropdownValueListProvider) async{
-
-    String html = await getHtml(dropdownValueListProvider);
+  Future<List<Map<String, String>>> parseHtml(DropdownValueListProvider dropdownValueListProvider,Map<String, String> currentAccaunt) async{
+    print(currentAccaunt);
+    String html = await getHtml(dropdownValueListProvider, currentAccaunt);
     
     List<Element> tableList = parse(html).querySelectorAll('tr');
 
@@ -151,7 +149,7 @@ class Parser {
         'mod1'      : link[2].trim()==""  ? "–" : link[2].trim(),
         'mod2'      : link[4].trim()==""  ? "–" : link[4].trim(),
         'mod3'      : link[6].trim()==""  ? "–" : link[6].trim(),
-        'mod4'      : link[9].trim()==""  ? "–" : link[9].trim(),
+        'mod4'      : link[8].trim()==""  ? "–" : link[8].trim(),
         'kurs'      : link[11].trim()=="" ? "–" : link[11].trim(),
         'zachet'    : link[12].trim()=="" ? "–" : link[12].trim().replaceFirst(" ", ""),
         'exam'      : link[14].trim()=="" ? "–" : link[14].trim().replaceFirst(" ", ""),

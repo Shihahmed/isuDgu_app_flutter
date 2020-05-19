@@ -39,9 +39,9 @@ class SubjectListProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void updateSubjectList(DropdownValueListProvider dropdownValueListProvider) async{
+  void updateSubjectList(DropdownValueListProvider dropdownValueListProvider,Map<String, String> currentAccaunt) async{
 
-    _subjectList = await Parser().parseHtml(dropdownValueListProvider);
+    _subjectList = await Parser().parseHtml(dropdownValueListProvider,currentAccaunt);
     print(_subjectList[0]);
 
     notifyListeners();

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:isudgu_app/Providers/SubjectListProvider.dart';
+import 'package:isudgu_app/Providers/accauntsProvider.dart';
 import 'package:isudgu_app/Providers/dropdownValueListProvider.dart';
 import 'package:provider/provider.dart';
 
 class SemestrDropDownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return Consumer<AccauntsProvider>(
+        builder: (context, accauntsProvider, child) {
     return Consumer<SubjectListProvider>(
         builder: (context, subjectListProvider, child) {
       return Consumer<DropdownValueListProvider>(
@@ -17,8 +20,9 @@ class SemestrDropDownButton extends StatelessWidget {
           onChanged: (String newValue) async{
             dropdownValueListProvider.dropdownValue = newValue;
             subjectListProvider.showWaiting = true;
-
-            await subjectListProvider.updateSubjectList(dropdownValueListProvider);
+            print("dropdown");
+            print(accauntsProvider.currentAccaunt);
+            await subjectListProvider.updateSubjectList(dropdownValueListProvider,accauntsProvider.currentAccaunt);
             
 
             subjectListProvider.showWaiting = false;
@@ -38,6 +42,7 @@ class SemestrDropDownButton extends StatelessWidget {
           }).toList(),
         );
       });
+    });
     });
   }
 }

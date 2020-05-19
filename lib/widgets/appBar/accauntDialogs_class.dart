@@ -4,7 +4,7 @@ import 'package:isudgu_app/storage.dart';
 import 'package:provider/provider.dart';
 
 class Dialogs {
-  accaunts(BuildContext context) {
+  accaunts(BuildContext context,AccauntsProvider accauntsProvider2) {
     return showDialog(
         context: context,
         barrierDismissible: true,
@@ -13,22 +13,21 @@ class Dialogs {
             create: (context) => AccauntsProvider(),
             child: Consumer<AccauntsProvider>(
                 builder: (context, accauntsProvider, child) {
-                accauntsProvider.update();
+                //accauntsProvider2.update();
               return AlertDialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 content: ListView.builder(
-                    itemCount: accauntsProvider.accauntsList.length,
+                    itemCount: accauntsProvider2.accauntsList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
-                        title: Text(accauntsProvider.accauntsList[index]["fName"]),
-                        subtitle: Text(accauntsProvider.accauntsList[index]["degree"]),
+                        title: Text(accauntsProvider2.accauntsList[index]["fName"]),
+                        subtitle: Text(accauntsProvider2.accauntsList[index]["degree"]),
                         onTap: () {
 
-                          accauntsProvider.currentAccaunt = accauntsProvider.accauntsList[index];
+                          accauntsProvider2.currentAccaunt = accauntsProvider2.accauntsList[index];
 
-                          print(accauntsProvider.accauntsList);
                           Navigator.pop(context);
                           
                         },
@@ -37,7 +36,7 @@ class Dialogs {
                 actions: <Widget>[
                   FlatButton(
                     onPressed: () async{ 
-                      await new Dialogs().newAccaunt(context);
+                      await new Dialogs().newAccaunt(context,accauntsProvider2);
                       accauntsProvider.update();
                     },
                     child: Text(
@@ -59,7 +58,7 @@ class Dialogs {
         });
   }
 
-  newAccaunt(BuildContext context) {
+  newAccaunt(BuildContext context, AccauntsProvider accauntsProvider2) {
     return showDialog(
         context: context,
         barrierDismissible: true,
@@ -141,9 +140,13 @@ class Dialogs {
                       'degree': 'бакалавриат'
                     };
 
-                    accauntsProvider.addToAccauntsList(newAccauntMap);
+                    accauntsProvider2.addToAccauntsList(newAccauntMap);
                     Navigator.pop(context);
-                    
+                    fnameController.text = "";
+                    nameController.text = "";
+                    lnameController.text = "";
+                    passController.text = "";
+
                   },
                   child: Text(
                     "Добавить",

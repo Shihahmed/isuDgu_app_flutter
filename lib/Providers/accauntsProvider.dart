@@ -28,13 +28,6 @@ class AccauntsProvider extends ChangeNotifier {
 
   List<Map<String, String>> get accauntsList => _accauntsList;
 
-  set accauntsList(List<Map<String, String>> newAccauntsList){
-
-    _accauntsList = newAccauntsList;
-    notifyListeners();
-
-  }
-
   void addToAccauntsList(Map<String, String> newAccaunt){
 
     _accauntsList.add(newAccaunt);

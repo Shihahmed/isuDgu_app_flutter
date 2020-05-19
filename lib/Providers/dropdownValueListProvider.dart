@@ -29,5 +29,11 @@ class DropdownValueListProvider extends ChangeNotifier{
       notifyListeners();
     }
 
+    void clear(){
+      _dropdownValue = "";
+      _dropdownValueList.clear();
+      notifyListeners();
+    }
+
 
 }

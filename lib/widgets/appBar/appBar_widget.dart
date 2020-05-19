@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isudgu_app/Providers/SubjectListProvider.dart';
+import 'package:isudgu_app/Providers/accauntsProvider.dart';
 import 'package:isudgu_app/Providers/dropdownValueListProvider.dart';
-import 'package:isudgu_app/accauntDialogs_class.dart';
+import 'package:isudgu_app/widgets/appBar/accauntDialogs_class.dart';
 
 import 'package:isudgu_app/widgets/appBar/aboutStudent_widget.dart';
 import 'package:isudgu_app/widgets/appBar/semestrDropDownButton_widget.dart';
@@ -56,14 +57,17 @@ class AppBarWidget extends StatelessWidget {
       actions: <Widget>[
         Builder(
           builder: (BuildContext context) {
+            return Consumer<AccauntsProvider>(
+        builder: (context, accauntsProvider, child) {
             return Consumer<DropdownValueListProvider>(
                 builder: (context, dropdownValueListProvider, child) {
               return Consumer<SubjectListProvider>(
                   builder: (context, subjectListProvider, child) {
                 refresh() async {
                   subjectListProvider.showWaiting = true;
-
-                  await subjectListProvider.updateSubjectList(dropdownValueListProvider);
+                  print("obnovit");
+                  print(accauntsProvider.currentAccaunt);
+                  await subjectListProvider.updateSubjectList(dropdownValueListProvider,accauntsProvider.currentAccaunt);
 
                   subjectListProvider.showWaiting = false;
                 }
@@ -74,10 +78,10 @@ class AppBarWidget extends StatelessWidget {
                       refresh();
                     } else if (choise == 'Сменить тему') {
                     } else if (choise == 'Сменить аккаунт') {
-                      await dialogs.accaunts(context);
+                      await dialogs.accaunts(context,accauntsProvider);
                       subjectListProvider.showWaiting = true;
-
-                      await subjectListProvider.updateSubjectList(dropdownValueListProvider);
+                      dropdownValueListProvider.clear();
+                      await subjectListProvider.updateSubjectList(dropdownValueListProvider,accauntsProvider.currentAccaunt);
                      
 
                       subjectListProvider.showWaiting = false;
@@ -92,6 +96,7 @@ class AppBarWidget extends StatelessWidget {
                     }).toList();
                   },
                 );
+              });
               });
             });
           },
