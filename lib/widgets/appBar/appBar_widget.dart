@@ -63,6 +63,7 @@ class AppBarWidget extends StatelessWidget {
                 builder: (context, dropdownValueListProvider, child) {
               return Consumer<SubjectListProvider>(
                   builder: (context, subjectListProvider, child) {
+                    
                 refresh() async {
                   subjectListProvider.showWaiting = true;
                   print("obnovit");

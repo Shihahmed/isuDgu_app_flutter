@@ -22,7 +22,7 @@ class SubjectListProvider extends ChangeNotifier{
   //_
   
 
-  List<Map<String, String>> _subjectList = [];
+  List<Map<String, String>> _subjectList =  [];
   
 
   List<Map<String, String>> get subjectList{
@@ -40,18 +40,13 @@ class SubjectListProvider extends ChangeNotifier{
   }
 
   void updateSubjectList(DropdownValueListProvider dropdownValueListProvider,Map<String, String> currentAccaunt) async{
+    //if(currentAccaunt != {}){
+      _subjectList = await Parser().parseHtml(currentAccaunt, dropdownValueListProvider);
+      print(_subjectList[0]);
 
-    _subjectList = await Parser().parseHtml(dropdownValueListProvider,currentAccaunt);
-    print(_subjectList[0]);
-
-    notifyListeners();
-    
+      notifyListeners();
+    //}
   }
-
-  
-
-
-  
 
 
 }

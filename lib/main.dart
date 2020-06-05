@@ -5,6 +5,7 @@ import 'package:isudgu_app/Providers/dropdownValueListProvider.dart';
 import 'package:isudgu_app/widgets/appBar/accauntDialogs_class.dart';
 import 'package:isudgu_app/widgets/cardGrid/cardGrid_widget.dart';
 import 'package:isudgu_app/widgets/appBar/appBar_widget.dart';
+import 'package:isudgu_app/widgets/startPage/startPage_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'Providers/SubjectListProvider.dart';
@@ -17,10 +18,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //disable orientations change
     SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -47,14 +50,22 @@ class _MyHomePageState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              AppBarWidget(),
-              CardGrid(),
-            ],
-          ),
-        ));
+      backgroundColor: Colors.white,
+      body: Consumer<AccauntsProvider>(
+          builder: (context, accauntsProvider, child) {
+        if (accauntsProvider.accauntsList.length < 1) {
+          return StartPage(accauntsProvider);
+        } else {
+          return SafeArea(
+            child: CustomScrollView(
+              slivers: <Widget>[
+                AppBarWidget(),
+                CardGrid(),
+              ],
+            ),
+          );
+        }
+      }),
+    );
   }
 }

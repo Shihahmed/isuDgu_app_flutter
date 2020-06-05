@@ -3,12 +3,11 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
-import 'package:isudgu_app/Providers/accauntsProvider.dart';
 import 'package:isudgu_app/Providers/dropdownValueListProvider.dart';
 
 class Parser {
 
-  Future<String> getHtml(DropdownValueListProvider dropdownValueListProvider,Map<String, String> currentAccaunt) async {
+  Future<String> getHtml(Map<String, String> currentAccaunt, [DropdownValueListProvider dropdownValueListProvider]) async {
     String out;
     try {
       
@@ -69,6 +68,10 @@ class Parser {
         });
       }
 
+      if(dropdownValueListProvider == null){
+        dropdownValueListProvider = new DropdownValueListProvider();
+      }
+
       if ( dropdownValueListProvider.dropdownValue == ''){
 
         List<Element> dropdownMax = document.querySelectorAll('option');
@@ -78,6 +81,7 @@ class Parser {
         dropdownValueListProvider.maxDropdownValue(dropdownValueListProvider.dropdownValue);
         
       }
+        
 
       Map<String, String> dataSendSession = {
 
@@ -123,9 +127,9 @@ class Parser {
     return out;
   }
 
-  Future<List<Map<String, String>>> parseHtml(DropdownValueListProvider dropdownValueListProvider,Map<String, String> currentAccaunt) async{
-    print(currentAccaunt);
-    String html = await getHtml(dropdownValueListProvider, currentAccaunt);
+  Future<List<Map<String, String>>> parseHtml(Map<String, String> currentAccaunt, DropdownValueListProvider dropdownValueListProvider) async{
+    
+    String html = await getHtml(currentAccaunt, dropdownValueListProvider);
     
     List<Element> tableList = parse(html).querySelectorAll('tr');
 
@@ -157,6 +161,79 @@ class Parser {
     }
 
     return rowMap;
+  }
+
+  Future<bool> validate (Map<String, String> newAccauntMap) async {
+    bool out = false;
+    try {
+      
+      Map<String, String> dataSend = {
+        "__EVENTTARGET": "EnterBtn",
+        "__EVENTARGUMENT": "",
+        "__VIEWSTATE":
+            "/wEPDwUKMTQ2MTA3ODA0MWRkyOsDv65TrLlbM6ga+uWJhfOVqmQ/RihVftbFpTmB4LM=",
+        "__EVENTVALIDATION":
+            "/wEWBgL9ipniDwK4jZRCAqaKlEICypChgggCl/KPlQYCm4zxugS2cJ5mgqC3JnZrasIRZK0eTzcFQlpGIuQakAR5i48crw==",
+        "LNameTxt":   newAccauntMap['fName'],
+        "FNameTxt":   newAccauntMap['sName'],
+        "PatrTxt" :   newAccauntMap['lName'],
+        "NZachKnTxt": newAccauntMap['password']
+      };
+
+      Map<String, String> headersSend = {
+        'Host': 'studstat.dgu.ru',
+        'Accept':
+            'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Origin': 'http://studstat.dgu.ru',
+        'DNT': '1',
+        'Connection': 'keep-alive',
+        'Referer':
+            'http://studstat.dgu.ru/login.aspx?ReturnUrl=%2fstat.aspx&cookieCheck=true',
+        'Upgrade-Insecure-Requests': '1',
+      };
+
+      String url =
+          "http://studstat.dgu.ru/login.aspx?ReturnUrl=%2f&cookieCheck=true";
+      
+
+      Client client = http.Client();
+
+      Response uriResponse =
+          await client.post(url, body: dataSend, headers: headersSend);
+
+      
+      client.close();
+
+      if (!uriResponse.body.contains('Вход в систему "Студенты"')){
+        out = true;
+      }
+ 
+
+    } catch (e) {
+      print(e);
+    }
+
+    return out;
+
+  }
+
+  Future<Map<String, String>> reedAboutStudent(Map<String, String> newAccauntMap) async{
+
+    String html = await getHtml(newAccauntMap);
+   
+    List<Element> tableList = parse(html).querySelectorAll('.cell');
+    
+    newAccauntMap['faculty'] = tableList[2].text;
+    newAccauntMap['department'] = tableList[3].text.replaceRange(tableList[3].text.indexOf('('), tableList[3].text.length,'');
+    newAccauntMap['degree'] = tableList[3].text.replaceRange(0, tableList[3].text.lastIndexOf(' ')+1, '').replaceFirst(')', '');
+
+
+    return newAccauntMap;
+
+
   }
 
 
