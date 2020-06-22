@@ -31,41 +31,50 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.grey,
         primarySwatch: Colors.grey,
       ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SubjectListProvider()),
-          ChangeNotifierProvider(create: (context) => AccauntsProvider()),
-          ChangeNotifierProvider(
-              create: (context) => DropdownValueListProvider()),
-        ],
-        child: _MyHomePageState(),
-      ),
+      home: new HomePage(),
     );
   }
 }
 
-class _MyHomePageState extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  HomePage({Key key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => new _MyHomePageState();
+}
+
+class _MyHomePageState extends State<HomePage> {
   final Dialogs dialog = new Dialogs();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Consumer<AccauntsProvider>(
-          builder: (context, accauntsProvider, child) {
-        if (accauntsProvider.accauntsList.length < 1) {
-          return StartPage(accauntsProvider);
-        } else {
-          return SafeArea(
-            child: CustomScrollView(
-              slivers: <Widget>[
-                AppBarWidget(),
-                CardGrid(),
-              ],
-            ),
-          );
-        }
-      }),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SubjectListProvider()),
+        ChangeNotifierProvider(create: (context) => AccauntsProvider()),
+        ChangeNotifierProvider(
+            create: (context) => DropdownValueListProvider()),
+      ],
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Consumer<AccauntsProvider>(
+            builder: (context, accauntsProvider, child) {
+          if (accauntsProvider.currentAccaunt == null) {
+            return Container();
+          } else if (accauntsProvider.currentAccaunt.length < 1) {
+            return StartPage(accauntsProvider);
+          } else {
+            return SafeArea(
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  AppBarWidget(),
+                  CardGrid(),
+                ],
+              ),
+            );
+          }
+        }),
+      ),
     );
   }
 }

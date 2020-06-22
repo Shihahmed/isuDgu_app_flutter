@@ -31,13 +31,25 @@ class AppBarWidget extends StatelessWidget {
           SizedBox(
             width: 5,
           ),
-          Text(
-            "Эмиров Ш. М.",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 17,
-            ),
-          ),
+          Consumer<AccauntsProvider>(
+              builder: (context, accauntsProvider, child) {
+            if (accauntsProvider.currentAccaunt.length > 0) {
+              return Text(
+                accauntsProvider.currentAccaunt['fName'] +
+                    ' ' +
+                    accauntsProvider.currentAccaunt['sName'][0] +
+                    '. ' +
+                    accauntsProvider.currentAccaunt['lName'][0] +
+                    '.',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 17,
+                ),
+              );
+            } else {
+              return SizedBox();
+            }
+          }),
           SizedBox(
             width: 10,
           ),
@@ -58,46 +70,47 @@ class AppBarWidget extends StatelessWidget {
         Builder(
           builder: (BuildContext context) {
             return Consumer<AccauntsProvider>(
-        builder: (context, accauntsProvider, child) {
-            return Consumer<DropdownValueListProvider>(
-                builder: (context, dropdownValueListProvider, child) {
-              return Consumer<SubjectListProvider>(
-                  builder: (context, subjectListProvider, child) {
-                    
-                refresh() async {
-                  subjectListProvider.showWaiting = true;
-                  print("obnovit");
-                  print(accauntsProvider.currentAccaunt);
-                  await subjectListProvider.updateSubjectList(dropdownValueListProvider,accauntsProvider.currentAccaunt);
+                builder: (context, accauntsProvider, child) {
+              return Consumer<DropdownValueListProvider>(
+                  builder: (context, dropdownValueListProvider, child) {
+                return Consumer<SubjectListProvider>(
+                    builder: (context, subjectListProvider, child) {
+                  
+                  refresh() async {
 
-                  subjectListProvider.showWaiting = false;
-                }
+                    subjectListProvider.subjectList = [];
+                    await subjectListProvider.updateSubjectList(
+                        dropdownValueListProvider,
+                        accauntsProvider.currentAccaunt);
+                        
+                  }
 
-                return PopupMenuButton<String>(
-                  onSelected: (String choise) async{
-                    if (choise == 'Обновить') {
-                      refresh();
-                    } else if (choise == 'Сменить тему') {
-                    } else if (choise == 'Сменить аккаунт') {
-                      await dialogs.accaunts(context,accauntsProvider);
-                      subjectListProvider.showWaiting = true;
-                      dropdownValueListProvider.clear();
-                      await subjectListProvider.updateSubjectList(dropdownValueListProvider,accauntsProvider.currentAccaunt);
-                     
+                  return PopupMenuButton<String>(
+                    onSelected: (String choise) async {
+                      if (choise == 'Обновить') {
+                        refresh();
+                      } else if (choise == 'Сменить тему') {
+                      } else if (choise == 'Сменить аккаунт') {
+                        await dialogs.accaunts(context, accauntsProvider);
 
-                      subjectListProvider.showWaiting = false;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return actionsPopUp.map((String choise) {
-                      return PopupMenuItem<String>(
-                        value: choise,
-                        child: Text(choise),
-                      );
-                    }).toList();
-                  },
-                );
-              });
+                        subjectListProvider.subjectList = [];
+                        dropdownValueListProvider.clear();
+                        await subjectListProvider.updateSubjectList(
+                            dropdownValueListProvider,
+                            accauntsProvider.currentAccaunt);
+
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return actionsPopUp.map((String choise) {
+                        return PopupMenuItem<String>(
+                          value: choise,
+                          child: Text(choise),
+                        );
+                      }).toList();
+                    },
+                  );
+                });
               });
             });
           },

@@ -154,7 +154,7 @@ class Parser {
         'mod2'      : link[4].trim()==""  ? "–" : link[4].trim(),
         'mod3'      : link[6].trim()==""  ? "–" : link[6].trim(),
         'mod4'      : link[8].trim()==""  ? "–" : link[8].trim(),
-        'kurs'      : link[11].trim()=="" ? "–" : link[11].trim(),
+        'kurs'      : link[10].trim()=="" ? "–" : link[10].trim(),
         'zachet'    : link[12].trim()=="" ? "–" : link[12].trim().replaceFirst(" ", ""),
         'exam'      : link[14].trim()=="" ? "–" : link[14].trim().replaceFirst(" ", ""),
       });

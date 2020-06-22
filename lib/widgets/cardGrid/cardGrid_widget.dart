@@ -1,7 +1,9 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:isudgu_app/Providers/SubjectListProvider.dart';
 import 'package:isudgu_app/Providers/accauntsProvider.dart';
 import 'package:isudgu_app/Providers/dropdownValueListProvider.dart';
+import 'package:isudgu_app/widgets/appBar/accauntDialogs_class.dart';
 import 'package:isudgu_app/widgets/cardGrid/newCard_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -14,18 +16,44 @@ class CardGrid extends StatelessWidget {
           builder: (context, dropdownValueListProvider, child) {
         return Consumer<SubjectListProvider>(
             builder: (context, subjectListProvider, child) {
-          refresh() async {
-            subjectListProvider.showWaiting = true;
-            await subjectListProvider.updateSubjectList(
-                dropdownValueListProvider, accauntsProvider.currentAccaunt);
-            subjectListProvider.showWaiting = false;
+          final Dialogs dialog = new Dialogs();
+
+          Future<bool> haveInternet() async {
+
+            var connectivityResult = await (Connectivity().checkConnectivity());
+            if (connectivityResult == ConnectivityResult.mobile) {
+              return true;
+            } else if (connectivityResult == ConnectivityResult.wifi) {
+              return true;
+            } else {
+              await dialog.noInternetDialog(context);
+
+              if (await haveInternet() == false) {
+                await haveInternet();
+              } else {
+                return true;
+              }
+            }
+            
           }
 
-          if (subjectListProvider.subjectList.length < 1) {
+          refresh() async {
+            if (await haveInternet() == true) {
+
+              if (subjectListProvider.subjectList.isNotEmpty){
+                subjectListProvider.subjectList = [];
+              }
+              
+              await subjectListProvider.updateSubjectList(
+                  dropdownValueListProvider, accauntsProvider.currentAccaunt);
+            }
+          }
+
+          if (subjectListProvider.subjectList.isEmpty) {
             refresh();
           }
 
-          if (subjectListProvider.showWaiting) {
+          if (subjectListProvider.subjectList.isEmpty) {
             return SliverList(
               delegate: SliverChildListDelegate([
                 SizedBox(),

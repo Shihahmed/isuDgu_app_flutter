@@ -8,7 +8,7 @@ class AboutStudent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<SubjectListProvider>(
         builder: (context, subjectListProvider, child) {
-      if (subjectListProvider.showWaiting)
+      if (subjectListProvider.subjectList.isEmpty)
         return Center(
           child: CircularProgressIndicator(
             strokeWidth: 7,

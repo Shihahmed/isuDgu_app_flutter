@@ -189,6 +189,37 @@ Widget newCard(Map<String, String> subject) {
                   ),
                 ],
               ),
+
+              Builder(builder: (context) {
+                if (subject["kurs"] == "–") {
+                  return SizedBox();
+                } else {
+                  return Expanded(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(3),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("курсовая: "),
+                            Text(
+                              subject["kurs"],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: markColor["kurs"],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      color: frontCardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
+                  );
+                }
+              })
             ]),
       ),
     ),

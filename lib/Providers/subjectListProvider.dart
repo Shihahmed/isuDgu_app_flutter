@@ -7,21 +7,6 @@ import 'package:isudgu_app/script.dart';
 
 class SubjectListProvider extends ChangeNotifier{
 
-
-  //For progress indicator in AppBar
-  bool _showWaiting = false;//true
-
-  set showWaiting(bool b) {
-
-    _showWaiting = b;
-    notifyListeners();
-
-  }
-  
-  bool get showWaiting => _showWaiting;
-  //_
-  
-
   List<Map<String, String>> _subjectList =  [];
   
 
@@ -39,10 +24,9 @@ class SubjectListProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void updateSubjectList(DropdownValueListProvider dropdownValueListProvider,Map<String, String> currentAccaunt) async{
+  Future<void> updateSubjectList(DropdownValueListProvider dropdownValueListProvider,Map<String, String> currentAccaunt) async{
     //if(currentAccaunt != {}){
       _subjectList = await Parser().parseHtml(currentAccaunt, dropdownValueListProvider);
-      print(_subjectList[0]);
 
       notifyListeners();
     //}
