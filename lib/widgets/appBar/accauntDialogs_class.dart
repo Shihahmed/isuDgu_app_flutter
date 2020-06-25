@@ -1,11 +1,11 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:isudgu_app/Providers/accauntsProvider.dart';
+import 'package:isudgu_app/Providers/themeProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:isudgu_app/widgets/startPage/startPage_widget.dart';
 
 class Dialogs {
-  accaunts(BuildContext context, AccauntsProvider accauntsProvider) {
+  accaunts(BuildContext context, AccauntsProvider accauntsProvider ,ThemeProvider themeProvider) {
     return showDialog(
         context: context,
         barrierDismissible: true,
@@ -24,7 +24,7 @@ class Dialogs {
                 } else if (connectivityResult == ConnectivityResult.wifi) {
                   return true;
                 } else {
-                  await dialog.noInternetDialog(context);
+                  await dialog.noInternetDialog(context,themeProvider);
 
                   if (await haveInternet() == false) {
                     await haveInternet();
@@ -35,6 +35,7 @@ class Dialogs {
               }
 
               return AlertDialog(
+                backgroundColor: themeProvider.scafoldBackgroundColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -43,16 +44,18 @@ class Dialogs {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title:
-                            Text(accauntsProvider.accauntsList[index]["fName"]),
+                            Text(accauntsProvider.accauntsList[index]["fName"],style: TextStyle(color: themeProvider.fontColor)),
                         subtitle: Text(
-                            accauntsProvider.accauntsList[index]["degree"]),
+                            accauntsProvider.accauntsList[index]["degree"],style: TextStyle(color: themeProvider.subtitleFontColor)),
                         trailing: IconButton(
                           icon: Icon(
+                            
                             Icons.clear,
+                            color: themeProvider.fontColor,
                           ),
                           onPressed: () async {
                             await new Dialogs()
-                                .deleteDialog(context, accauntsProvider, index);
+                                .deleteDialog(context, accauntsProvider,themeProvider, index);
                             accauntsProvider2.update();
                             if (accauntsProvider.accauntsList.length < 1) {
                               Navigator.pop(context);
@@ -74,19 +77,19 @@ class Dialogs {
                 actions: <Widget>[
                   FlatButton(
                     onPressed: () async {
-                      await new Dialogs().newAccaunt(context, accauntsProvider);
+                      await new Dialogs().newAccaunt(context, accauntsProvider, themeProvider);
                       accauntsProvider2.update();
                     },
                     child: Text(
                       "Новый",
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: themeProvider.fontColor),
                     ),
                   ),
                   FlatButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
                       "Отмена",
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: themeProvider.fontColor),
                     ),
                   ),
                 ],
@@ -96,7 +99,8 @@ class Dialogs {
         });
   }
 
-  newAccaunt(BuildContext context, AccauntsProvider accauntsProvider2) {
+  newAccaunt(BuildContext context, AccauntsProvider accauntsProvider2,
+      ThemeProvider themeProvider) {
     final nameController = TextEditingController(text: "");
     final fnameController = TextEditingController(text: "");
     final lnameController = TextEditingController(text: "");
@@ -109,13 +113,12 @@ class Dialogs {
             create: (context) => AccauntsProvider(),
             child: Consumer<AccauntsProvider>(
                 builder: (context, accauntsProvider, child) {
-
               Color edgeColor;
 
               if (accauntsProvider.validation == 1) {
                 edgeColor = Colors.red;
               } else {
-                edgeColor = Colors.grey;
+                edgeColor = themeProvider.fontColor;
               }
 
               final Dialogs dialog = new Dialogs();
@@ -128,7 +131,7 @@ class Dialogs {
                 } else if (connectivityResult == ConnectivityResult.wifi) {
                   return true;
                 } else {
-                  await dialog.noInternetDialog(context);
+                  await dialog.noInternetDialog(context, themeProvider);
 
                   if (await haveInternet() == false) {
                     await haveInternet();
@@ -139,70 +142,100 @@ class Dialogs {
               }
 
               return AlertDialog(
+                  backgroundColor: themeProvider.scafoldBackgroundColor,
                   content: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
-                        Text("Вход в информационную систему ДГУ"),
+                        Text("Вход в информационную систему ДГУ",style: TextStyle(color: themeProvider.fontColor)),
                         SizedBox(
                           height: 20,
                         ),
                         TextField(
+                          style: TextStyle(color: themeProvider.fontColor),
                           controller: fnameController,
                           scrollPadding: EdgeInsets.all(15),
                           autocorrect: false,
                           maxLength: 20,
                           decoration: InputDecoration(
-
                               isDense: true,
                               enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: edgeColor, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
                               focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(50))),
                               border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15))),
                               counter: Container(),
+                              hintStyle: TextStyle(
+                                  color: themeProvider.subtitleFontColor),
                               hintText: 'Фамилия'),
                         ),
                         TextField(
+                          style: TextStyle(color: themeProvider.fontColor),
                           controller: nameController,
                           autocorrect: false,
                           maxLength: 20,
                           decoration: InputDecoration(
                               isDense: true,
                               enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: edgeColor, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
                               focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(50))),
                               border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15))),
                               counter: Container(),
+                              hintStyle: TextStyle(
+                                  color: themeProvider.subtitleFontColor),
                               hintText: 'Имя'),
                         ),
                         TextField(
+                          style: TextStyle(color: themeProvider.fontColor),
                           controller: lnameController,
                           autocorrect: false,
                           maxLength: 20,
                           decoration: InputDecoration(
                               isDense: true,
                               enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: edgeColor, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
                               focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(50))),
                               border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15))),
                               counter: Container(),
+                              labelStyle:
+                                  TextStyle(color: themeProvider.fontColor),
+                              hintStyle: TextStyle(
+                                  color: themeProvider.subtitleFontColor),
                               hintText: 'Отчество'),
                         ),
                         TextField(
+                          style: TextStyle(color: themeProvider.fontColor),
                           keyboardType: TextInputType.numberWithOptions(),
                           controller: passController,
                           autocorrect: false,
@@ -210,15 +243,23 @@ class Dialogs {
                           decoration: InputDecoration(
                               isDense: true,
                               enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: edgeColor, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
                               focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(50))),
                               border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: edgeColor, width: 1.0),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(15))),
                               counter: Container(),
+                              hintStyle: TextStyle(
+                                  color: themeProvider.subtitleFontColor),
                               hintText: 'Номер зачетной книжки'),
                         ),
                         Builder(builder: (BuildContext context) {
@@ -269,6 +310,8 @@ class Dialogs {
                             lnameController.text = "";
                             passController.text = "";
 
+                            accauntsProvider.validation = 0;
+
                             Navigator.pop(context);
                           } else {
                             accauntsProvider.validation = 1;
@@ -277,7 +320,7 @@ class Dialogs {
                       },
                       child: Text(
                         "Добавить",
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: themeProvider.fontColor),
                       ),
                     ),
                     FlatButton(
@@ -291,7 +334,7 @@ class Dialogs {
                       },
                       child: Text(
                         "Отмена",
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: themeProvider.fontColor),
                       ),
                     ),
                   ]);
@@ -300,14 +343,18 @@ class Dialogs {
         });
   }
 
-  deleteDialog(
-      BuildContext context, AccauntsProvider accauntsProvider, int index) {
+  deleteDialog(BuildContext context, AccauntsProvider accauntsProvider,
+      ThemeProvider themeProvider, int index) {
     return showDialog(
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Удалить аккаунт?"),
+            backgroundColor: themeProvider.scafoldBackgroundColor,
+            title: Text(
+              "Удалить аккаунт?",
+              style: TextStyle(color: themeProvider.fontColor),
+            ),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
@@ -317,14 +364,14 @@ class Dialogs {
                 },
                 child: Text(
                   "Удалить",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: themeProvider.fontColor),
                 ),
               ),
               FlatButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   "Отмена",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: themeProvider.fontColor),
                 ),
               ),
             ],
@@ -332,13 +379,17 @@ class Dialogs {
         });
   }
 
-  noInternetDialog(BuildContext context) {
+  noInternetDialog(BuildContext context, ThemeProvider themeProvider) {
     return showDialog(
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Нет соединения с интернетом"),
+            backgroundColor: themeProvider.scafoldBackgroundColor,
+            title: Text(
+              "Нет соединения с интернетом",
+              style: TextStyle(color: themeProvider.fontColor),
+            ),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
@@ -346,7 +397,7 @@ class Dialogs {
                 },
                 child: Text(
                   "Повторить",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: themeProvider.fontColor),
                 ),
               ),
             ],

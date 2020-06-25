@@ -119,8 +119,8 @@ class AccauntsProvider extends ChangeNotifier {
 
   void deleteFromAccauntsListByIndex(int index) {
     _accauntsList.removeAt(index);
-    if(_accauntsList.length<1){
-      _currentAccaunt = {};
+    if(_accauntsList.isEmpty){
+      currentAccaunt = {};
     }
     notifyListeners();
   }

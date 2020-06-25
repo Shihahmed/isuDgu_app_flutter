@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isudgu_app/Providers/themeProvider.dart';
 
 Color calculateColor(String str) {
   if (str == '–') {
@@ -22,10 +23,11 @@ Color calculateColor(String str) {
   return Colors.green;
 }
 
-Widget newCard(Map<String, String> subject) {
-  var col = Colors.black;
-  var frontCardColor = Colors.white;
-  var backCardColor = Color.fromRGBO(242, 242, 247, 1);
+Widget newCard(Map<String, String> subject, ThemeProvider themeProvider) {
+  var col = themeProvider.fontColor;
+  var frontCardColor = themeProvider.scafoldBackgroundColor;
+  var backCardColor =
+      themeProvider.cardBackgroundColor; //  Color.fromRGBO(242, 242, 240, 1);
 
   Map<String, Color> markColor = {
     'mod1': calculateColor(subject['mod1']),
@@ -71,7 +73,8 @@ Widget newCard(Map<String, String> subject) {
                     child: Card(
                       child: Column(
                         children: <Widget>[
-                          Text("1"),
+                          Text("1",
+                              style: TextStyle(color: themeProvider.fontColor)),
                           Text(
                             subject["mod1"],
                             style: TextStyle(
@@ -87,7 +90,8 @@ Widget newCard(Map<String, String> subject) {
                     child: Card(
                       child: Column(
                         children: <Widget>[
-                          Text("2"),
+                          Text("2",
+                              style: TextStyle(color: themeProvider.fontColor)),
                           Text(
                             subject["mod2"],
                             style: TextStyle(
@@ -103,7 +107,8 @@ Widget newCard(Map<String, String> subject) {
                     child: Card(
                       child: Column(
                         children: <Widget>[
-                          Text("3"),
+                          Text("3",
+                              style: TextStyle(color: themeProvider.fontColor)),
                           Text(
                             subject["mod3"],
                             style: TextStyle(
@@ -119,7 +124,8 @@ Widget newCard(Map<String, String> subject) {
                     child: Card(
                       child: Column(
                         children: <Widget>[
-                          Text("4"),
+                          Text("4",
+                              style: TextStyle(color: themeProvider.fontColor)),
                           Text(
                             subject["mod4"],
                             style: TextStyle(
@@ -134,7 +140,7 @@ Widget newCard(Map<String, String> subject) {
                 ],
               ),
 
-              Container(
+              SizedBox(
                 height: 3,
               ), //space
 
@@ -147,7 +153,9 @@ Widget newCard(Map<String, String> subject) {
                         padding: EdgeInsets.all(3),
                         child: Column(
                           children: <Widget>[
-                            Text("зачет"),
+                            Text("зачет",
+                                style:
+                                    TextStyle(color: themeProvider.fontColor)),
                             Text(
                               subject["zachet"],
                               textAlign: TextAlign.center,
@@ -170,7 +178,9 @@ Widget newCard(Map<String, String> subject) {
                         padding: EdgeInsets.all(3),
                         child: Column(
                           children: <Widget>[
-                            Text("экзамен"),
+                            Text("экзамен",
+                                style:
+                                    TextStyle(color: themeProvider.fontColor)),
                             Text(
                               subject["exam"],
                               textAlign: TextAlign.center,
@@ -201,7 +211,9 @@ Widget newCard(Map<String, String> subject) {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text("курсовая: "),
+                            Text("курсовая: ",
+                                style:
+                                    TextStyle(color: themeProvider.fontColor)),
                             Text(
                               subject["kurs"],
                               textAlign: TextAlign.center,

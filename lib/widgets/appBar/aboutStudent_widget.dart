@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isudgu_app/Providers/SubjectListProvider.dart';
 import 'package:isudgu_app/Providers/accauntsProvider.dart';
+import 'package:isudgu_app/Providers/themeProvider.dart';
 import 'package:provider/provider.dart';
 
 class AboutStudent extends StatelessWidget {
@@ -17,25 +18,44 @@ class AboutStudent extends StatelessWidget {
       else
         return Consumer<AccauntsProvider>(
             builder: (context, accauntsProvider, child) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Text("Направление: " + accauntsProvider.currentAccaunt["degree"]),
-                SizedBox(
-                  height: 3,
-                ),
-                Text("Факультет: "),
-                Text(accauntsProvider.currentAccaunt["faculty"]),
-                SizedBox(
-                  height: 3,
-                ),
-                Text("Кафедра: "),
-                Text(accauntsProvider.currentAccaunt["department"],
-                  overflow: TextOverflow.fade,
-                ),
-              ]);
+          return Consumer<ThemeProvider>(
+              builder: (context, themeProvider, child) {
+
+                Color _fontColor  = themeProvider.subtitleFontColor; 
+            return Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Text(
+                    "Направление: " + accauntsProvider.currentAccaunt["degree"],
+                    style: TextStyle(color: _fontColor),
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text(
+                    "Факультет: ",
+                    style: TextStyle(color: _fontColor),
+                  ),
+                  Text(
+                    accauntsProvider.currentAccaunt["faculty"],
+                    style: TextStyle(color: _fontColor),
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text(
+                    "Кафедра: ",
+                    style: TextStyle(color: _fontColor),
+                  ),
+                  Text(
+                    accauntsProvider.currentAccaunt["department"],
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(color: _fontColor),
+                  ),
+                ]);
+          });
         });
     });
   }
