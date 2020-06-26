@@ -70,13 +70,18 @@ class _MyHomePageState extends State<HomePage> {
             if (accauntsProvider.currentAccaunt == null) {
               return Container();
             } else if (accauntsProvider.currentAccaunt.length < 1) {
-              return StartPage(accauntsProvider,themeProvider);
+              return StartPage(accauntsProvider, themeProvider);
             } else {
               return SafeArea(
                 child: CustomScrollView(
                   slivers: <Widget>[
                     AppBarWidget(),
                     CardGrid(),
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        SizedBox(height: 15,),
+                      ]),
+                    ),
                   ],
                 ),
               );

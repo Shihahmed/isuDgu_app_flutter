@@ -137,6 +137,30 @@ Widget newCard(Map<String, String> subject, ThemeProvider themeProvider) {
                       color: frontCardColor,
                     ),
                   ),
+                  Builder(builder: (context) {
+                    if (subject.containsKey("mod5")  && subject["mod5"] != "") {
+                      return Expanded(
+                        child: Card(
+                          child: Column(
+                            children: <Widget>[
+                              Text("5",
+                                  style: TextStyle(
+                                      color: themeProvider.fontColor)),
+                              Text(
+                                subject["mod5"],
+                                style: TextStyle(
+                                  color: markColor["mod4"],
+                                ),
+                              ),
+                            ],
+                          ),
+                          color: frontCardColor,
+                        ),
+                      );
+                    } else {
+                      return SizedBox();
+                    }
+                  })
                 ],
               ),
 

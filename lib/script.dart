@@ -138,24 +138,41 @@ class Parser {
       for (String link in textInTable) {
         splitedTextInTable.add(link.split("\n").toList());
       }
-
-      for (List<String> link in splitedTextInTable) {
-        rowMap.add({
-          'discipline': link[1].trim(),
-          'mod1': link[2].trim() == "" ? "–" : link[2].trim(),
-          'mod2': link[4].trim() == "" ? "–" : link[4].trim(),
-          'mod3': link[6].trim() == "" ? "–" : link[6].trim(),
-          'mod4': link[8].trim() == "" ? "–" : link[8].trim(),
-          'kurs': link[10].trim() == "" ? "–" : link[10].trim(),
-          'zachet': link[12].trim() == ""
-              ? "–"
-              : link[12].trim().replaceFirst(" ", ""),
-          'exam': link[14].trim() == ""
-              ? "–"
-              : link[14].trim().replaceFirst(" ", ""),
-        });
+      int q = splitedTextInTable[0].length;
+      if (splitedTextInTable[0].length < 18) {
+        for (List<String> link in splitedTextInTable) {
+          rowMap.add({
+            'discipline': link[1].trim(),
+            'mod1': link[2].trim() == "" ? "–" : link[2].trim(),
+            'mod2': link[4].trim() == "" ? "–" : link[4].trim(),
+            'mod3': link[6].trim() == "" ? "–" : link[6].trim(),
+            'mod4': link[8].trim() == "" ? "–" : link[8].trim(),
+            'kurs': link[10].trim() == "" ? "–" : link[10].trim(),
+            'zachet': link[12].trim() == ""? "–": link[12].trim().replaceFirst(" ", ""),
+            'exam': link[14].trim() == "" ? "–" : link[14].trim().replaceFirst(" ", ""),
+          });
+        }
+      } else {
+        for (List<String> link in splitedTextInTable) {
+          rowMap.add({
+            'discipline': link[1].trim(),
+            'mod1': link[2].trim() == "" ? "–" : link[2].trim(),
+            'mod2': link[4].trim() == "" ? "–" : link[4].trim(),
+            'mod3': link[6].trim() == "" ? "–" : link[6].trim(),
+            'mod4': link[8].trim() == "" ? "–" : link[8].trim(),
+            'mod5': link[10].trim(),
+            'kurs': link[12].trim() == "" ? "–" : link[12].trim(),
+            'zachet': link[14].trim() == "" ? "–"
+                : link[14].trim().replaceFirst(" ", ""),
+            'exam': link[16].trim() == ""
+                ? "–"
+                : link[16].trim().replaceFirst(" ", ""),
+          });
+          
+        }
       }
     }
+    
     return rowMap;
   }
 

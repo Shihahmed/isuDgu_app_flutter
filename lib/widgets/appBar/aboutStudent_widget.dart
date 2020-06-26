@@ -10,18 +10,22 @@ class AboutStudent extends StatelessWidget {
     return Consumer<SubjectListProvider>(
         builder: (context, subjectListProvider, child) {
       if (subjectListProvider.subjectList.isEmpty)
-        return Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 7,
-          ),
-        );
+        return Consumer<ThemeProvider>(
+            builder: (context, themeProvider, child) {
+          return Center(
+            child: CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(
+                  themeProvider.progressCircleColor),
+              strokeWidth: 7,
+            ),
+          );
+        });
       else
         return Consumer<AccauntsProvider>(
             builder: (context, accauntsProvider, child) {
           return Consumer<ThemeProvider>(
               builder: (context, themeProvider, child) {
-
-                Color _fontColor  = themeProvider.subtitleFontColor; 
+            Color _fontColor = themeProvider.subtitleFontColor;
             return Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
