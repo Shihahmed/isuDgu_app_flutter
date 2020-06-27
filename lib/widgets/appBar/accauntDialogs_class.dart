@@ -1,11 +1,13 @@
-import 'package:connectivity/connectivity.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:isudgu_app/Providers/accauntsProvider.dart';
 import 'package:isudgu_app/Providers/themeProvider.dart';
 import 'package:provider/provider.dart';
 
 class Dialogs {
-  accaunts(BuildContext context, AccauntsProvider accauntsProvider ,ThemeProvider themeProvider) {
+  accaunts(BuildContext context, AccauntsProvider accauntsProvider,
+      ThemeProvider themeProvider) {
     return showDialog(
         context: context,
         barrierDismissible: true,
@@ -17,14 +19,13 @@ class Dialogs {
               final Dialogs dialog = new Dialogs();
 
               Future<bool> haveInternet() async {
-                var connectivityResult =
-                    await (Connectivity().checkConnectivity());
-                if (connectivityResult == ConnectivityResult.mobile) {
-                  return true;
-                } else if (connectivityResult == ConnectivityResult.wifi) {
-                  return true;
-                } else {
-                  await dialog.noInternetDialog(context,themeProvider);
+                try {
+                  final result = await InternetAddress.lookup('google.com');
+                  if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                    return true;
+                  }
+                } on SocketException catch (_) {
+                  await dialog.noInternetDialog(context, themeProvider);
 
                   if (await haveInternet() == false) {
                     await haveInternet();
@@ -43,19 +44,21 @@ class Dialogs {
                     itemCount: accauntsProvider.accauntsList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
-                        title:
-                            Text(accauntsProvider.accauntsList[index]["fName"],style: TextStyle(color: themeProvider.fontColor)),
+                        title: Text(
+                            accauntsProvider.accauntsList[index]["fName"],
+                            style: TextStyle(color: themeProvider.fontColor)),
                         subtitle: Text(
-                            accauntsProvider.accauntsList[index]["degree"],style: TextStyle(color: themeProvider.subtitleFontColor)),
+                            accauntsProvider.accauntsList[index]["degree"],
+                            style: TextStyle(
+                                color: themeProvider.subtitleFontColor)),
                         trailing: IconButton(
                           icon: Icon(
-                            
                             Icons.clear,
                             color: themeProvider.fontColor,
                           ),
                           onPressed: () async {
-                            await new Dialogs()
-                                .deleteDialog(context, accauntsProvider,themeProvider, index);
+                            await new Dialogs().deleteDialog(context,
+                                accauntsProvider, themeProvider, index);
                             accauntsProvider2.update();
                             if (accauntsProvider.accauntsList.length < 1) {
                               Navigator.pop(context);
@@ -77,7 +80,8 @@ class Dialogs {
                 actions: <Widget>[
                   FlatButton(
                     onPressed: () async {
-                      await new Dialogs().newAccaunt(context, accauntsProvider, themeProvider);
+                      await new Dialogs()
+                          .newAccaunt(context, accauntsProvider, themeProvider);
                       accauntsProvider2.update();
                     },
                     child: Text(
@@ -124,13 +128,12 @@ class Dialogs {
               final Dialogs dialog = new Dialogs();
 
               Future<bool> haveInternet() async {
-                var connectivityResult =
-                    await (Connectivity().checkConnectivity());
-                if (connectivityResult == ConnectivityResult.mobile) {
-                  return true;
-                } else if (connectivityResult == ConnectivityResult.wifi) {
-                  return true;
-                } else {
+                try {
+                  final result = await InternetAddress.lookup('google.com');
+                  if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                    return true;
+                  }
+                } on SocketException catch (_) {
                   await dialog.noInternetDialog(context, themeProvider);
 
                   if (await haveInternet() == false) {
@@ -146,7 +149,8 @@ class Dialogs {
                   content: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
-                        Text("Вход в информационную систему ДГУ",style: TextStyle(color: themeProvider.fontColor)),
+                        Text("Вход в информационную систему ДГУ",
+                            style: TextStyle(color: themeProvider.fontColor)),
                         SizedBox(
                           height: 20,
                         ),

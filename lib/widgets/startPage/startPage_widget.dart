@@ -1,14 +1,14 @@
-import 'package:connectivity/connectivity.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:isudgu_app/Providers/accauntsProvider.dart';
 import 'package:isudgu_app/Providers/themeProvider.dart';
 import 'package:isudgu_app/widgets/appBar/accauntDialogs_class.dart';
 
 class StartPage extends StatelessWidget {
-
   AccauntsProvider accauntsProvider;
   ThemeProvider themeProvider;
-  StartPage(this.accauntsProvider , this.themeProvider);
+  StartPage(this.accauntsProvider, this.themeProvider);
 
   final nameController = TextEditingController(text: "");
   final fnameController = TextEditingController(text: "");
@@ -28,13 +28,13 @@ class StartPage extends StatelessWidget {
     final Dialogs dialog = new Dialogs();
 
     Future<bool> haveInternet() async {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.mobile) {
-        return true;
-      } else if (connectivityResult == ConnectivityResult.wifi) {
-        return true;
-      } else {
-        await dialog.noInternetDialog(context , themeProvider);
+      try {
+        final result = await InternetAddress.lookup('google.com');
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          return true;
+        }
+      } on SocketException catch (_) {
+        await dialog.noInternetDialog(context, themeProvider);
 
         if (await haveInternet() == false) {
           await haveInternet();
@@ -75,19 +75,19 @@ class StartPage extends StatelessWidget {
                 autocorrect: false,
                 maxLength: 20,
                 decoration: InputDecoration(
-                    
                     isDense: true,
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: edgeColor, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: edgeColor, width: 1.0),
+                        borderSide: BorderSide(color: edgeColor, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(50))),
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(color: edgeColor, width: 1.0),
+                        borderSide: BorderSide(color: edgeColor, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                     counter: Container(),
-                    hintStyle: TextStyle(color: themeProvider.subtitleFontColor),
+                    hintStyle:
+                        TextStyle(color: themeProvider.subtitleFontColor),
                     hintText: 'Фамилия'),
               ),
               TextField(
@@ -101,13 +101,14 @@ class StartPage extends StatelessWidget {
                         borderSide: BorderSide(color: edgeColor, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: edgeColor, width: 1.0),
+                        borderSide: BorderSide(color: edgeColor, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(50))),
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(color: edgeColor, width: 1.0),
+                        borderSide: BorderSide(color: edgeColor, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                     counter: Container(),
-                    hintStyle: TextStyle(color: themeProvider.subtitleFontColor),
+                    hintStyle:
+                        TextStyle(color: themeProvider.subtitleFontColor),
                     hintText: 'Имя'),
               ),
               TextField(
@@ -128,7 +129,8 @@ class StartPage extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                     counter: Container(),
                     labelStyle: TextStyle(color: themeProvider.fontColor),
-                    hintStyle: TextStyle(color: themeProvider.subtitleFontColor),
+                    hintStyle:
+                        TextStyle(color: themeProvider.subtitleFontColor),
                     hintText: 'Отчество'),
               ),
               TextField(
@@ -143,13 +145,14 @@ class StartPage extends StatelessWidget {
                         borderSide: BorderSide(color: edgeColor, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: edgeColor, width: 1.0),
+                        borderSide: BorderSide(color: edgeColor, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(50))),
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(color: edgeColor, width: 1.0),
+                        borderSide: BorderSide(color: edgeColor, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                     counter: Container(),
-                    hintStyle: TextStyle(color: themeProvider.subtitleFontColor),
+                    hintStyle:
+                        TextStyle(color: themeProvider.subtitleFontColor),
                     hintText: 'Номер зачетной книжки'),
               ),
               Builder(builder: (BuildContext context) {
@@ -191,7 +194,6 @@ class StartPage extends StatelessWidget {
                       passController.text = "";
 
                       accauntsProvider.validation = 0;
-                      
                     } else {
                       accauntsProvider.validation = 1;
                     }
@@ -203,8 +205,8 @@ class StartPage extends StatelessWidget {
                       width: 20.0,
                       height: 20.0,
                       child: CircularProgressIndicator(
-                        valueColor:
-                            new AlwaysStoppedAnimation<Color>(themeProvider.fontColor),
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                            themeProvider.fontColor),
                         strokeWidth: 2,
                       ),
                     );

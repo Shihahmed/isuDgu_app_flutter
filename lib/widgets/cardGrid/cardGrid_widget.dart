@@ -1,4 +1,5 @@
-import 'package:connectivity/connectivity.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:isudgu_app/Providers/SubjectListProvider.dart';
 import 'package:isudgu_app/Providers/accauntsProvider.dart';
@@ -22,9 +23,11 @@ class CardGrid extends StatelessWidget {
             final Dialogs dialog = new Dialogs();
 
             Future<bool> haveInternet() async {
+              /*
               var connectivityResult =
                   await (Connectivity().checkConnectivity());
               if (connectivityResult == ConnectivityResult.mobile) {
+                
                 return true;
               } else if (connectivityResult == ConnectivityResult.wifi) {
                 return true;
@@ -37,6 +40,22 @@ class CardGrid extends StatelessWidget {
                   return true;
                 }
               }
+              */
+              try {
+                final result = await InternetAddress.lookup('google.com');
+                if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                  return true;
+                }
+              } on SocketException catch (_) {
+                await dialog.noInternetDialog(context  , themeProvider);
+
+                if (await haveInternet() == false) {
+                  await haveInternet();
+                } else {
+                  return true;
+                }
+              }
+
             }
 
             refresh() async {
@@ -71,7 +90,8 @@ class CardGrid extends StatelessWidget {
                 crossAxisCount: 2,
                 children: List.generate(subjectListProvider.subjectList.length,
                     (index) {
-                  return newCard(subjectListProvider.subjectList[index], themeProvider);
+                  return newCard(
+                      subjectListProvider.subjectList[index], themeProvider);
                 }),
               );
             }

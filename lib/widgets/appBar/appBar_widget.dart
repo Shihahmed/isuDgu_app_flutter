@@ -13,11 +13,7 @@ import 'package:provider/provider.dart';
 class AppBarWidget extends StatelessWidget {
   final Dialogs dialogs = new Dialogs();
 
-  final List<String> actionsPopUp = <String>[
-    'Обновить',
-    'Сменить тему',
-    'Сменить аккаунт'
-  ];
+  final List<String> actionsPopUp = <String>['Сменить тему', 'Сменить аккаунт'];
 
   @override
   Widget build(BuildContext context) {
@@ -87,16 +83,18 @@ class AppBarWidget extends StatelessWidget {
                       }
 
                       return PopupMenuButton<String>(
-                        icon: Icon(Icons.more_vert,color: themeProvider.fontColor,),
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: themeProvider.fontColor,
+                        ),
                         color: themeProvider.scafoldBackgroundColor,
                         onSelected: (String choise) async {
-                          if (choise == 'Обновить') {
-                            refresh();
-                          } else if (choise == 'Сменить тему') {
+                          if (choise == 'Сменить тему') {
                             themeProvider.changeTheme();
                             themeProvider.saveTheme();
                           } else if (choise == 'Сменить аккаунт') {
-                            await dialogs.accaunts(context, accauntsProvider, themeProvider);
+                            await dialogs.accaunts(
+                                context, accauntsProvider, themeProvider);
 
                             subjectListProvider.subjectList = [];
                             dropdownValueListProvider.clear();
