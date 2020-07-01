@@ -47,24 +47,27 @@ Widget newCard(Map<String, String> subject, ThemeProvider themeProvider) {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Expanded(
+                child: SizedBox(),
+              ),
               Row(
                 children: <Widget>[
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.all(5),
-                      child: Text(
-                        subject["discipline"],
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(color: col, fontSize: 14),
+                      child: Container(
+                        child: Text(
+                          subject["discipline"],
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(color: col, fontSize: 14),
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
 
-              Container(
-                height: 3,
-              ), //space
+             // SizedBox(height: 10,), //space
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,7 +141,7 @@ Widget newCard(Map<String, String> subject, ThemeProvider themeProvider) {
                     ),
                   ),
                   Builder(builder: (context) {
-                    if (subject.containsKey("mod5")  && subject["mod5"] != "") {
+                    if (subject.containsKey("mod5") && subject["mod5"] != "") {
                       return Expanded(
                         child: Card(
                           child: Column(
@@ -228,34 +231,45 @@ Widget newCard(Map<String, String> subject, ThemeProvider themeProvider) {
                 if (subject["kurs"] == "–") {
                   return SizedBox();
                 } else {
-                  return Expanded(
-                    child: Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(3),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("курсовая: ",
-                                style:
-                                    TextStyle(color: themeProvider.fontColor)),
-                            Text(
-                              subject["kurs"],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: markColor["kurs"],
+                  return Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(3),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text("курсовая: ",
+                                  style: TextStyle(
+                                      color: themeProvider.fontColor)),
+                              Text(
+                                subject["kurs"],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: markColor["kurs"],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                        ],
                       ),
-                      color: frontCardColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
+                    ),
+                    color: frontCardColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                   );
                 }
-              })
+              }),
+              Expanded(
+                child: SizedBox(),
+              ),
             ]),
       ),
     ),

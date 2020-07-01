@@ -67,7 +67,7 @@ class ThemeProvider extends ChangeNotifier{
     _fontColor = Colors.white;
     _subtitleFontColor = Color.fromRGBO(171, 178, 191, 1);
     _scafoldBackgroundColor = Color.fromRGBO(33, 37, 43, 1);
-    _cardBackgroundColor = Color.fromRGBO(54, 61, 70, 1);  // 55, 55, 55 
+    _cardBackgroundColor = Color.fromRGBO(54, 61, 70, 1);
     _primaryColor = Colors.grey;
     _progressCircleColor = Color.fromRGBO(54, 61, 70, 1);
     notifyListeners();

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:isudgu_app/Providers/SubjectListProvider.dart';
 import 'package:isudgu_app/Providers/accauntsProvider.dart';
 import 'package:isudgu_app/Providers/dropdownValueListProvider.dart';
@@ -23,29 +24,12 @@ class CardGrid extends StatelessWidget {
             final Dialogs dialog = new Dialogs();
 
             Future<bool> haveInternet() async {
-              /*
-              var connectivityResult =
-                  await (Connectivity().checkConnectivity());
-              if (connectivityResult == ConnectivityResult.mobile) {
-                
-                return true;
-              } else if (connectivityResult == ConnectivityResult.wifi) {
-                return true;
-              } else {
-                await dialog.noInternetDialog(context  , themeProvider);
-
-                if (await haveInternet() == false) {
-                  await haveInternet();
-                } else {
-                  return true;
-                }
-              }
-              */
               try {
-                final result = await InternetAddress.lookup('google.com');
-                if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-                  return true;
-                }
+
+                await Client().get('http://studstat.dgu.ru/login.aspx?ReturnUrl=%2f&cookieCheck=true');
+
+                return true;
+                
               } on SocketException catch (_) {
                 await dialog.noInternetDialog(context  , themeProvider);
 
@@ -70,10 +54,6 @@ class CardGrid extends StatelessWidget {
             }
 
             if (subjectListProvider.subjectList.isEmpty) {
-              int q;
-              if (accauntsProvider.currentAccaunt.isEmpty) {
-                q = 1;
-              }
               refresh();
             }
 

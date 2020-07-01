@@ -34,49 +34,59 @@ class Dialogs {
                   }
                 }
               }
+              List<Widget> accauntsWidjetsList = [];
+               accauntsProvider.accauntsList.forEach((element) {
+                accauntsWidjetsList.add( Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                        color: themeProvider.cardBackgroundColor,
+                        child: ListTile(
+                            title: Text(
+                                element["fName"],
+                                style: TextStyle(color: themeProvider.fontColor)),
+                            subtitle: Text(
+                                element["degree"],
+                                style: TextStyle(
+                                    color: themeProvider.subtitleFontColor)),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.clear,
+                                color: themeProvider.fontColor,
+                              ),
+                              onPressed: () async {
+                                await new Dialogs().deleteDialog(context,
+                                    accauntsProvider, themeProvider, 0);
+                                accauntsProvider2.update();
+                                if (accauntsProvider.accauntsList.length < 1) {
+                                  Navigator.pop(context);
+                                }
+                              },
+                            ),
+                            onTap: () async {
+                              if (await haveInternet() == true) {
+                                accauntsProvider.currentAccaunt = element;
 
+                                accauntsProvider.saveAccaunts();
+                                accauntsProvider2.update();
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
+                      ));
+                });
               return AlertDialog(
                 backgroundColor: themeProvider.scafoldBackgroundColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                content: ListView.builder(
-                    itemCount: accauntsProvider.accauntsList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text(
-                            accauntsProvider.accauntsList[index]["fName"],
-                            style: TextStyle(color: themeProvider.fontColor)),
-                        subtitle: Text(
-                            accauntsProvider.accauntsList[index]["degree"],
-                            style: TextStyle(
-                                color: themeProvider.subtitleFontColor)),
-                        trailing: IconButton(
-                          icon: Icon(
-                            Icons.clear,
-                            color: themeProvider.fontColor,
+                content: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          Column(
+                            children: accauntsWidjetsList
                           ),
-                          onPressed: () async {
-                            await new Dialogs().deleteDialog(context,
-                                accauntsProvider, themeProvider, index);
-                            accauntsProvider2.update();
-                            if (accauntsProvider.accauntsList.length < 1) {
-                              Navigator.pop(context);
-                            }
-                          },
-                        ),
-                        onTap: () async {
-                          if (await haveInternet() == true) {
-                            accauntsProvider.currentAccaunt =
-                                accauntsProvider.accauntsList[index];
-
-                            accauntsProvider.saveAccaunts();
-                            accauntsProvider2.update();
-                            Navigator.pop(context);
-                          }
-                        },
-                      );
-                    }),
+                        ],
+                      ),
+                    ),
                 actions: <Widget>[
                   FlatButton(
                     onPressed: () async {

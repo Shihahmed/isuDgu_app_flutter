@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:isudgu_app/Providers/SubjectListProvider.dart';
 import 'package:isudgu_app/Providers/accauntsProvider.dart';
 import 'package:isudgu_app/Providers/dropdownValueListProvider.dart';
@@ -23,10 +24,9 @@ class SemestrDropDownButton extends StatelessWidget {
 
             Future<bool> haveInternet() async {
               try {
-                  final result = await InternetAddress.lookup('google.com');
-                  if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                  await Client().get('http://studstat.dgu.ru/login.aspx?ReturnUrl=%2f&cookieCheck=true');
                     return true;
-                  }
+                  
                 } on SocketException catch (_) {
                   await dialog.noInternetDialog(context, themeProvider);
 
