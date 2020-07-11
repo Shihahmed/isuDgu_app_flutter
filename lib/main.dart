@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       create: (context) => ThemeProvider(),
       child: Consumer<ThemeProvider>(builder: (context, themeProvider, child) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Studstat DGU',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primaryColor: themeProvider.primaryColor,

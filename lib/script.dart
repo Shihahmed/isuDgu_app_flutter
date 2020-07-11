@@ -236,10 +236,23 @@ class Parser {
     newAccauntMap['faculty'] = tableList[2].text;
     newAccauntMap['department'] = tableList[3].text.replaceRange(
         tableList[3].text.indexOf('('), tableList[3].text.length, '');
-    newAccauntMap['degree'] = tableList[3]
-        .text
-        .replaceRange(0, tableList[3].text.lastIndexOf(' ') + 1, '')
-        .replaceFirst(')', '');
+
+    String degree = tableList[3].text;
+    degree = degree.replaceFirst("напр-е", "");
+    degree = degree.replaceRange(0, degree.indexOf('(') + 1, '');
+    degree = degree.trimLeft();
+    if(degree.contains(',')){
+
+    
+    degree = degree.replaceRange(degree.indexOf(','), degree.lastIndexOf(')') + 1, '');
+    }else if (degree.contains(',')){
+      degree = degree.replaceRange(degree.indexOf(' '), degree.lastIndexOf(')'), '');
+    }else{
+      degree  = degree.replaceAll(')', '');
+    }
+
+    degree = degree.trim();
+    newAccauntMap['degree'] = degree;
 
     return newAccauntMap;
   }

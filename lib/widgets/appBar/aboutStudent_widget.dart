@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:isudgu_app/Providers/SubjectListProvider.dart';
 import 'package:isudgu_app/Providers/accauntsProvider.dart';
@@ -31,32 +32,55 @@ class AboutStudent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  Text(
-                    "Направление: " + accauntsProvider.currentAccaunt["degree"],
-                    style: TextStyle(color: _fontColor),
+                  Row(
+                    children: <Widget>[
+                      AutoSizeText(
+                        "Направление: ",
+                        maxFontSize: 14,
+                        style: TextStyle(
+                            color: _fontColor, fontWeight: FontWeight.bold),
+                      ),
+                       AutoSizeText(
+                    accauntsProvider.currentAccaunt["degree"],
+                    style: TextStyle(
+                        color: _fontColor, fontStyle: FontStyle.italic),
+                    maxLines: 2,
+                    maxFontSize: 14,
                   ),
+                    ],
+                  ),
+                 
                   SizedBox(
                     height: 3,
                   ),
-                  Text(
+                  AutoSizeText(
                     "Факультет: ",
-                    style: TextStyle(color: _fontColor),
+                    maxFontSize: 14,
+                    style: TextStyle(
+                        color: _fontColor, fontWeight: FontWeight.bold),
                   ),
-                  Text(
+                  AutoSizeText(
                     accauntsProvider.currentAccaunt["faculty"],
-                    style: TextStyle(color: _fontColor),
+                    maxFontSize: 14,
+                    style: TextStyle(
+                        color: _fontColor, fontStyle: FontStyle.italic),
+                    maxLines: 2,
                   ),
                   SizedBox(
                     height: 3,
                   ),
-                  Text(
+                  AutoSizeText(
                     "Кафедра: ",
-                    style: TextStyle(color: _fontColor),
+                    maxFontSize: 14,
+                    style: TextStyle(
+                        color: _fontColor, fontWeight: FontWeight.bold),
                   ),
-                  Text(
+                  AutoSizeText(
                     accauntsProvider.currentAccaunt["department"],
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(color: _fontColor),
+                    maxFontSize: 14,
+                    style: TextStyle(
+                        color: _fontColor, fontStyle: FontStyle.italic),
+                    maxLines: 2,
                   ),
                 ]);
           });

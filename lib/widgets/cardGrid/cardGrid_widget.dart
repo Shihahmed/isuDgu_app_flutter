@@ -67,11 +67,14 @@ class CardGrid extends StatelessWidget {
               return SliverGrid.count(
                 mainAxisSpacing: 10,
                 childAspectRatio: (0.85),
+                
                 crossAxisCount: 2,
                 children: List.generate(subjectListProvider.subjectList.length,
                     (index) {
-                  return newCard(
-                      subjectListProvider.subjectList[index], themeProvider);
+                  return Center(
+                    child: newCard(
+                        subjectListProvider.subjectList[index], themeProvider),
+                  );
                 }),
               );
             }

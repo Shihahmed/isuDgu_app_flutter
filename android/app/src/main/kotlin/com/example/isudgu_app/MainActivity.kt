@@ -1,4 +1,4 @@
-package com.example.isudgu_app
+package com.isudgu_app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
